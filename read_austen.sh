@@ -1,26 +1,21 @@
 #!/bin/bash
 
-# Define the path to your text file
-LINE_TRACKER_FILE="./line_tracker.txt"
-AUSTEN_TXT="./pride_and_prejudice.txt"
+BOOK_NAME_FILE="./book_name_file.txt"
 
+# Read state
+AUSTEN_TXT=$(sed -n '1p' "$BOOK_NAME_FILE")
+line=$(sed -n '2p' "$BOOK_NAME_FILE")
 
-# Read the first line of the file into a variable
-# Use < "$FILE" to redirect the file content to the read command
-read -r line < "$LINE_TRACKER_FILE"
+LINES_TO_PRINT=5
 
-p="p"
-sed -n $line$p  $AUSTEN_TXT
+count=0
+while [ $count -lt $LINES_TO_PRINT ]
+do
+sed -n "${line}p" "$AUSTEN_TXT"
 line=$((line + 1))
-sed -n $line$p  $AUSTEN_TXT
-line=$((line + 1))
-sed -n $line$p  $AUSTEN_TXT
-line=$((line + 1))
-sed -n $line$p  $AUSTEN_TXT
-line=$((line + 1))
-sed -n $line$p  $AUSTEN_TXT
-line=$((line + 1))
+count=$((count + 1))
+done
 
-
-# Write the new number back to the file
-echo "$line" > "$LINE_TRACKER_FILE"
+# Save updated state
+echo "$AUSTEN_TXT" > "$BOOK_NAME_FILE"
+echo "$line" >> "$BOOK_NAME_FILE"
